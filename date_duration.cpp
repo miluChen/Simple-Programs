@@ -1,7 +1,7 @@
 /*
  * This program will compute the duration in days between two dates excluding the end date
  * The date format should be: mm/dd/yyyy
- * This program assume the given strings match the format
+ * This program assumes the given strings match the format
  */
 
 #include <iostream>
@@ -78,6 +78,6 @@ int main(int argc, char *argv[]) {
 		std::cout << "ERROR usage: ./a.out date1 date2" << std::endl;
 		return -1;
 	}
-	std::cout << "There are " << DateDuration::computeDuration(argv[1], argv[2]) << " Days between " << argv[1] << " and " << argv[2] << ", excluding the end date." << std::endl;
+	std::cout << "There are " << DateDuration::computeDuration(argv[1], argv[2]) << " days between " << argv[1] << " and " << argv[2] << ", excluding the end date." << std::endl;
 	return 0;
 }
