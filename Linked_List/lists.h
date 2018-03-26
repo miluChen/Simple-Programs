@@ -1,15 +1,12 @@
 #ifndef __C_LISTS__
 #define __C_LISTS__
 
+#include "../include/types.h"
+
 #define DATA(L) ((L)->datapointer)
 #define NEXT(L) ((L)->next)
 
-typedef enum { OK, ERROR } status;
-typedef enum { FALSE=0, TRUE=1 } bool;
-
-typedef void *generic_ptr;
 typedef struct node node, *list;
-
 struct node {
 	generic_ptr datapointer;
 	list next;
