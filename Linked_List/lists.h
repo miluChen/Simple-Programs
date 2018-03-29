@@ -38,4 +38,12 @@ void free_node(list *p_L);
 // sort the list
 void sortList(list *p_L, int (*p_cmp_f)());
 
+/* primitive operations for circular linked list: 
+   the "list" variable used to access the data structure points to the last node */
+status init_circ_list(list *p_L);
+bool empty_circ_list(list L);
+status circ_insert(list *p_L, generic_ptr data);
+status circ_append(list *p_L, generic_ptr data);
+status circ_delete(list *p_L, generic_ptr *p_data);
+status circ_delete_node(list *p_L, list node);
 #endif
