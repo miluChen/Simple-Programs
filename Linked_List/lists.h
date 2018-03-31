@@ -5,11 +5,19 @@
 
 #define DATA(L) ((L)->datapointer)
 #define NEXT(L) ((L)->next)
+#define PREV(L) ((L)->prev)
 
 typedef struct node node, *list;
 struct node {
 	generic_ptr datapointer;
 	list next;
+};
+
+typedef struct double_node double_node, *double_list;
+struct double_node {
+	generic_ptr datapointer;
+	double_list prev;
+	double_list next;
 };
 
 /* primitive operations on Linked Lists */
@@ -50,4 +58,14 @@ list circ_list_iterator(list L, list lastreturn);
 int circ_length(list L);
 list nth_node(list L, int number);
 status circ_traverse(list L, status (*p_func_f)());
+
+/* primitive operations for doubly-linked list */
+status allocate_double_node(double_list *p_L, generic_ptr data);
+void free_double_node(double_list *p_L);
+status init_double_list(double_list *p_L);
+bool empty_double_list(double_list L);
+status double_insert(double_list *p_L, generic_ptr data);
+status double_delete(double_list *p_L, generic_ptr *p_data);
+status double_delete_node(double_list *p_L, double_list node);
+
 #endif

@@ -259,3 +259,83 @@ status circ_traverse(list L, status (*p_func_f)()) {
 	} while (tmp != L);
 	return OK;
 }
+
+status allocate_double_node(double_list *p_L, generic_ptr data) {
+	double_list L = (double_list)malloc(sizeof(double_node));
+
+	if (L == NULL)
+		return ERROR;
+
+	*p_L = L;
+	DATA(L) = data;
+	NEXT(L) = NULL;
+	PREV(L) = NULL;
+	return OK;
+}
+
+void free_double_node(double_list *p_L) {
+	free(*p_L);
+	*p_L = NULL;
+}
+
+status init_double_list(double_list *p_L) {
+	*p_L = NULL;
+	return OK;
+}
+
+bool empty_double_list(double_list L) {
+	return (L == NULL) ? TRUE : FALSE;
+}
+
+status double_insert(double_list *p_L, generic_ptr data) {
+	double_list L;
+
+	if (allocate_double_node(&L, data) == ERROR)
+		return ERROR;
+
+	if (empty_double_list(*p_L) == TRUE) {
+		PREV(L) = NEXT(L) = NULL;
+	}
+	else {
+		NEXT(L) = *p_L;
+		PREV(L) = PREV(*p_L);
+		PREV(*p_L) = L;
+		if (PREV(L) != NULL)
+			NEXT(PREV(L)) = L;
+	}
+	*p_L = L;
+	return OK;
+}
+
+status double_delete(double_list *p_L, generic_ptr *p_data) {
+	if (empty_double_list(*p_L) == TRUE)
+		return ERROR;
+
+	*p_data = DATA(*p_L);
+	return double_delete_node(p_L, *p_L);
+}
+
+status double_delete_node(double_list *p_L, double_list node) {
+	double_list prev, next;
+
+	if (empty_double_list(*p_L) == TRUE)
+		return ERROR;
+
+	prev = PREV(node);
+	next = NEXT(node);
+
+	if (prev != NULL)
+		NEXT(prev) = next;
+	if (next != NULL)
+		PREV(next) = prev;
+
+	if (node == *p_L) {
+		if (next != NULL)
+			*p_L = next;
+		else
+			*p_L = prev;
+	}
+
+	free_double_node(&node);
+	return OK;
+}
