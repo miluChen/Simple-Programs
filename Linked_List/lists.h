@@ -69,5 +69,10 @@ status double_delete(double_list *p_L, generic_ptr *p_data);
 status double_delete_node(double_list *p_L, double_list node);
 int double_length(double_list L);
 double_list nth_double_node(double_list L, int number);
+status double_traverse(list L, status (*p_func_f)());
+// extract sections of a list
+void cut_list(double_list *p_L, double_list *p_start, double_list *p_end);
+// combine two lists
+void paste_list(double_list *p_target, double_list *source);
 
 #endif
