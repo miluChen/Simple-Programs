@@ -339,3 +339,66 @@ status double_delete_node(double_list *p_L, double_list node) {
 	free_double_node(&node);
 	return OK;
 }
+
+int double_length(list L) {
+	/*list lastreturn = NULL;
+	int length = 0;
+
+	while ((lastreturn = circ_list_iterator(L, lastreturn)) != NULL)
+		length++;
+	return length;*/
+}
+double_list nth_double_node(double_list L, int number) {
+
+}
+
+status double_traverse(double_list L, status (*p_func_f)()) {
+
+}
+
+int double_node_number(double_list L) {
+
+}
+
+double_list nth_relative_double_node(double_list L, int direction) {
+
+}
+
+// extract sections of a list
+void cut_list(double_list *p_L, double_list *p_start, double_list *p_end) {
+	// extract the range of nodes *p_start -- *p_end from *p_L
+	double_list start, end;
+
+	start = *p_start;
+	end = *p_end;
+
+	if (PREV(start))
+		NEXT(PREV(start)) = NEXT(end);
+	if (NEXT(end))
+		PREV(NEXT(end)) = PREV(start);
+	if (*p_L == start)
+		*p_L = NEXT(end);
+	PREV(start) = NEXT(end) = NULL;
+}
+
+// combine two lists
+void paste_list(double_list *p_target, double_list *p_source) {
+	// take *p_source and put it after *p_target. Assumes *p_source is the first node in the list
+	double_list target, source, lastnode;
+
+	if (empty_double_list(*p_source) == TRUE)
+		return;
+	if (empty_double_list(*p_target) == TRUE)
+		*p_target = *p_source;
+	else {
+		source = *p_source;
+		target = *p_target;
+		lastnode = nth_double_node(source, -1);
+		NEXT(lastnode) = NEXT(target);
+		if (NEXT(target) != NULL)
+			PREV(NEXT(target)) = lastnode;
+		PREV(source) = target;
+		NEXT(target) = source;
+	}
+	*p_source = NULL;
+}

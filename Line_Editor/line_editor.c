@@ -54,6 +54,7 @@ status writeline(char *s) {
 // insert new lines into file.
 // the function prompts the user for the lines to be added and inserts them before the line indicated
 // the end of user input is indicated by a period (".") on a line by itself.
+// TODO: Problem: it is not possible to insert lines at the very end of the file
 int insertlines(char *linespec, double_list *p_head, double_list *p_current) {
 	double_list newdata, startnode, endnode;
 	status rc;
@@ -139,5 +140,60 @@ int deletelines(char *linespec, double_list *p_head, double_list *p_current) {
 	return 0;
 }
 
-int printlines(char *linespec, double_list *p_head, double_list *p_current);
-int movelines(char *linespec, double_list *p_head, double_list *p_current);
+// print a range of lines
+int printlines(char *linespec, double_list *p_head, double_list *p_current) {
+	// print out lines. Direction indicates whether going forward or backward
+	double_list startnode, endnode;
+	int startnumber, endnumber, count, direction;
+	int rc;
+
+	rc = parse_linespec(linespec, *p_head, *p_current, &startnode, &endnode);
+	if (rc)
+		return rc;
+
+	startnumber = double_node_number(startnode);
+	endnumber = double_node_number(endnode);
+	direction = (startnumber < endnumber ) ? 1 : -1;
+	count = (endnumber - startnumber) * direction + 1;
+	while (count-- > 0) {
+		printf("%d %s", startnumber, DATA(startnode));
+		startnumber += direction;
+		startnode = nth_relative_double_node(startnode, direction);
+	}
+	*p_current = endnode;
+	return 0;
+}
+
+// TODO: Problem: it is not possible to move lines to the very end of the file
+int movelines(char *linespec, double_list *p_head, double_list *p_current) {
+	// move lines to after p_current. make sure the lines moved do not include p_current
+	double_list startnode, endnode;
+	double_list tmpnode;
+	int startnumber, endnumber;
+	int rc, currentnumber;
+	int tmp;
+
+	rc = parse_linespec(linespec, *p_head, *p_current, &startnode, &endnode);
+	if (rc)
+		return rc;
+
+	startnumber = double_node_number(startnode);
+	endnumber = double_node_number(endnode);
+	currentnumber = double_node_number(*p_current);
+	// make sure start < end
+	if (startnumber > endnumber) {
+		tmp = startnumber;
+		startnumber = endnumber;
+		endnumber = tmp;
+		tmpnode = startnode;
+		startnode = endnode;
+		endnode = tmpnode;
+	}
+	// do not include the current line in the ones being moved
+	if (currentnumber >= startnumber && currentnumber <= endnumber)
+		return E_LINES;
+
+	cut_list(p_head, &startnode, &endnode);
+	paste_list(&PREV(*p_current), &startnode);
+	return 0;
+}
