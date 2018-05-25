@@ -1,7 +1,8 @@
 #ifndef __C_QUEUE_JOBDATA__
 #define __C_QUEUE_JOBDATA__
 
-#include "queues.h"
+// #include "queues.h"
+#include "priority_queue.h"
 
 typedef struct {
 	int basetime;	// system clock time when the job was put into the queue
